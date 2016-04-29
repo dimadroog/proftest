@@ -1,0 +1,44 @@
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-star-empty lgt" aria-hidden="true"></span></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Заполненные анкеты <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+              <li><a class="ddown-menu" href="{% url 'result' 'junior' %}">Анкеты учащихся <b>5-6-7</b> классов</a></li>
+              <li><a class="ddown-menu" href="{% url 'result' 'middle' %}">Анкеты учащихся <b>8-9</b> классов</a></li>
+              <li><a class="ddown-menu" href="{% url 'result' 'senior' %}">Анкеты учащихся <b>10-11</b> классов</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Сводные результаты <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+              <li><a class="ddown-menu" href="{% url 'summary' 'junior' %}">Сводные результаты учащихся <b>5-6-7</b> классов</a></li>
+              <li><a class="ddown-menu" href="{% url 'summary' 'middle' %}">Сводные результаты учащихся <b>8-9</b> классов</a></li>
+              <li><a class="ddown-menu" href="{% url 'summary' 'senior' %}">Сводные результаты учащихся <b>10-11</b> классов</a></li>
+          </ul>
+        </li>
+        <li><a href="/">Тест</a></li>
+        <li><a href="/admin/tests/">Школы и предметы</a></li>
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/admin/logout">Выйти</a></li>
+
+      </ul>
+
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>

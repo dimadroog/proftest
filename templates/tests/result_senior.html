@@ -1,0 +1,314 @@
+    {% for result in results %}
+        <div id="result_panel"  class="panel {% if result.view %}panel-success{% else %}panel-primary{% endif %}">
+            <div class="panel-body cp panel-toggler">
+                <div class="row">
+                    <div class="col-sm-6 text-muted">
+                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> {{ result.date }}
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        {% if result.view %}
+                            <span data='{"id":"{{ result.id }}", "group":"{{ group }}"}' class="label label-success cp view-label">Просмотренно</span>
+                        {% else %}
+                            <span data='{"id":"{{ result.id }}", "group":"{{ group }}"}' class="label label-primary cp view-label">Непросмотренно</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body panel-hidden dn">
+
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%">Вопрос:</th>
+                                <th>Ответ:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td>
+                                    1. В какой ШКОЛЕ учится
+                                </td>
+                                <td>
+                                    {{ result.school }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    2. В каком КЛАССЕ учится
+                                </td>
+                                <td>
+                                    {{ result.school_class }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    3. Пол
+                                </td>
+                                <td>
+                                    {% if result.gender == 'male' %}
+                                        Мужской
+                                    {% else %}
+                                        Женский
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    4. Выбор будующей профессии
+                                </td>
+                                <td>
+                                    {% if result.future_prof == 'yes' %}
+                                        Да, {{ result.text_yes_future_prof }}
+                                    {% elif result.future_prof == 'addict'  %}
+                                        Склоняюсь к: {{ result.text_addict_future_prof }}
+                                    {% elif result.future_prof == 'not_think'  %}
+                                        Нет - еще не задумывался над этим
+                                    {% elif result.future_prof == 'not_know_myself'  %}
+                                        Нет - плохо знаю свои способности
+                                    {% elif result.future_prof == 'not_know_how_choose'  %}
+                                        Нет - не знаю, как выбирать профессию
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    5. Нужна ли помощь в выборе профессии?
+                                </td>
+                                <td>
+                                    {% for help_prof_choice in result.help_prof_choice.all %}
+                                        {{ help_prof_choice }};<br>
+                                    {% endfor %}
+                                    {% if result.text_help_prof_choice %}
+                                        Свой вариант: {{ result.text_help_prof_choice }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    6. Что планирует делать после школы
+                                </td>
+                                <td>
+                                    {% if result.after_school == 'high' %}
+                                        Получать высшее образование
+                                    {% elif result.after_school == 'college'  %}
+                                        Получать специальность в колледже, техникуме
+                                    {% elif result.after_school == 'work'  %}
+                                        Пойти работать сразу после школы
+                                    {% elif result.after_school == 'relax'  %}
+                                        Ничего не планирую делать, хочу отдохнуть от учебы
+                                    {% elif result.after_school == 'army'  %}
+                                        Уйти в армию
+                                    {% elif result.after_school == 'not_know'  %}
+                                        Я пока не знаю
+                                    {% else %}
+                                        Свой вариант: {{ result.text_after_school }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    7. Выбрал ли уч. заведение для поступления?
+                                </td>
+                                <td>
+                                    {% if result.have_chosen_inst == 'one' %}
+                                        Да, я выбрал(а) конкретное учебное заведение: {{ result.text_one_have_chosen_inst }}
+                                    {% elif result.have_chosen_inst == 'many'  %}
+                                        Я попробую поступать в несколько учебных заведений: {{ result.text_one_have_chosen_inst }}
+                                    {% elif result.have_chosen_inst == 'not_know'  %}
+                                        Я еще не выбрал(а)
+                                    {% elif result.have_chosen_inst == 'not'  %}
+                                        Не выбрал(а), т.к. не собираюсь поступать в учебное заведение сразу после школы
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    8. Критерии выбора ВУЗа
+                                </td>
+                                <td>
+                                    {% for why_this_inst in result.why_this_inst.all %}
+                                        {{ why_this_inst }};<br>
+                                    {% endfor %}
+                                    {% if result.text_why_this_inst %}
+                                        Свой вариант: {{ result.text_why_this_inst }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    9. Выбрал ли направление подготовки?
+                                </td>
+                                <td>
+                                    {% if result.have_chosen_training == 'one' %}
+                                        Да, я выбрал(а) конкретное учебное заведение: {{ result.text_one_have_chosen_training }}
+                                    {% elif result.have_chosen_training == 'many'  %}
+                                        Я попробую поступать в несколько учебных заведений: {{ result.text_one_have_chosen_training }}
+                                    {% elif result.have_chosen_training == 'not_know'  %}
+                                        Я еще не выбрал(а)
+                                    {% elif result.have_chosen_training == 'not'  %}
+                                        Не выбрал(а), т.к. не собираюсь поступать в учебное заведение сразу после школы
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    10. Как готвится к поступлению?
+                                </td>
+                                <td>
+                                    {% for prepare_to_enter in result.prepare_to_enter.all %}
+
+                                        {{ prepare_to_enter }}
+                                        {% if forloop.counter == 3 %}
+                                            : {{ result.text_coach_prepare_to_enter }}
+                                        {% endif %}
+                                        {% if forloop.counter == 4 %}
+                                            : {{ result.text_course_prepare_to_enter }}
+                                        {% endif %}
+                                        <br>
+                                    {% endfor %}
+                                    {% if result.text_other_prepare_to_enter %}
+                                        Свой вариант: {{ result.text_other_prepare_to_enter }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    11. Хотел бы учиться в университете?
+                                </td>
+                                <td>
+                                    {% if result.if_you_want_ugtu == 'no' %}
+                                        Нет: {{ result.text_no_if_you_want_ugtu }}
+                                    {% elif result.if_you_want_ugtu == 'yes_but_do_not' %}
+                                        Хотел бы, но не буду: {{ result.text_yes_if_you_want_ugtu }}
+                                    {% elif result.if_you_want_ugtu == 'not_know'  %}
+                                        Не знаю
+                                    {% elif result.if_you_want_ugtu == 'yes' %}
+                                        Да
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    12. Хотел бы посещать подготовительные курсы УГТУ?
+                                </td>
+                                <td>
+                                    {% if result.if_you_want_ugtu_training == 'yes' %}
+                                        Да : {{ result.text_if_you_want_ugtu_training }}
+                                    {% elif result.if_you_want_ugtu_training == 'no_money' %}
+                                        Хотел(а) бы, но нет возможности, т.к. курсы платные
+                                    {% elif result.if_you_want_ugtu_training == 'no' %}
+                                        Нет
+                                    {% elif result.if_you_want_ugtu_training == 'already' %}
+                                        Уже посещаю
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    13. В каких сферах студенческой жизни хотел бы принимать участие?
+                                </td>
+                                <td>
+                                    {% for students_life in result.students_life.all %}
+                                        {{ students_life }}<br>
+                                    {% endfor %}
+                                    {% if result.text_students_life %}
+                                        Свой вариант: {{ result.text_students_life }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td>
+                                    14. Таблица интересов и достижений респондента
+                                </td>
+                                <td>
+                                    <div class="table-interests">
+                                        <table>
+                                            <tr>
+                                                <th>
+                                                    Область интересов
+                                                </th>
+                                                <th>
+                                                    Отношение
+                                                </th>
+                                                <th>
+                                                    Достижения
+                                                </th>
+                                            </tr>
+
+                                            {%  for interest in result.senior_interests.all %}
+                                                <tr>
+                                                    <td>
+                                                        {{ interest.interest }}
+                                                    </td>
+                                                    <td>
+                                                        {% if interest.status == '1' %}
+                                                            <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+                                                        {% else %}
+                                                            <span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {{ interest.progress }}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    17. Контактные данные для рассылки
+                                </td>
+                                <td>
+                                    {% if result.senior_contacts.first.last_name %}
+                                         Фамилия: {{ result.senior_contacts.first.last_name }}<br>
+                                    {% endif %}
+
+                                    {% if result.senior_contacts.first.first_name %}
+                                         Имя: {{ result.senior_contacts.first.first_name }}<br>
+                                    {% endif %}
+
+                                    {% if result.senior_contacts.first.middle_name %}
+                                         Отчество: {{ result.senior_contacts.first.middle_name }}<br>
+                                    {% endif %}
+
+                                    {% if result.senior_contacts.first.phone %}
+                                         Телефон: {{ result.senior_contacts.first.phone }}<br>
+                                    {% endif %}
+
+                                    {% if result.senior_contacts.first.email %}
+                                         E-mail: {{ result.senior_contacts.first.email }}<br>
+                                    {% endif %}
+
+                                    {% if not result.senior_contacts.first.last_name and not result.senior_contacts.first.first_name and not result.senior_contacts.first.middle_name and not result.senior_contacts.first.phone and not result.senior_contacts.first.email %}
+                                        Ничего нет
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+    {% endfor %}

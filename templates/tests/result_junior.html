@@ -1,0 +1,181 @@
+    {% for result in results %}
+        <div id="result_panel" class="panel {% if result.view %}panel-success{% else %}panel-primary{% endif %}">
+            <div class="panel-body cp panel-toggler">
+                <div class="row">
+                    <div class="col-sm-6 text-muted">
+                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> {{ result.date }}
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        {% if result.view %}
+                            <span data='{"id":"{{ result.id }}", "group":"{{ group }}"}' class="label label-success cp view-label">Просмотренно</span>
+                        {% else %}
+                            <span data='{"id":"{{ result.id }}", "group":"{{ group }}"}' class="label label-primary cp view-label">Непросмотренно</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body panel-hidden dn">
+
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%">Вопрос:</th>
+                                <th>Ответ:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td>
+                                    1. В какой ШКОЛЕ учится
+                                </td>
+                                <td>
+                                    {{ result.school }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    2. В каком КЛАССЕ учится
+                                </td>
+                                <td>
+                                    {{ result.school_class }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    3. Кем мечтает стать
+                                </td>
+                                <td>
+                                    {{ result.dream_prof }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    4. Любимые учебные предметы
+                                </td>
+                                <td>
+                                    {% for learn_subject in result.learn_subjects.all %}
+                                        {{ learn_subject }};&nbsp
+                                    {% endfor %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    5. Углубленное изучение предметов
+                                </td>
+                                <td>
+                                    {% for deep_learn_subject in result.deep_learn_subject.all %}
+                                        {{ deep_learn_subject }};&nbsp
+                                    {% endfor %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    6. Кружки, секции, муз. школа
+                                </td>
+                                <td>
+                                    {% if result.hobby == 'no' %}
+                                        Нет
+                                    {% else %}
+                                        Да, {{ result.text_hobby }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    7. Что такое университет?
+                                </td>
+                                <td>
+                                    {% if result.what_is_university == 'no' %}
+                                        Не знаю
+                                    {% else %}
+                                        Да, {{ result.text_what_is_university }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    8. Знает ли об университете в г. Ухта
+                                </td>
+                                <td>
+                                    {% if result.know_university_in_city == 'no' %}
+                                        Нет
+                                    {% else %}
+                                        Да, {{ result.text_know_university_in_city }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    9. Откуда узнал об университете в г. Ухта
+                                </td>
+                                <td>
+                                    {% for how_did_you_kno in result.how_did_you_know.all %}
+                                        {{ how_did_you_kno }};&nbsp
+                                    {% endfor %}
+                                    {% if result.text_how_did_you_know %}
+                                        Другое: {{ result.text_how_did_you_know }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    10. Есть ли знакомые учащиеся в УГТУ?
+                                </td>
+                                <td>
+                                    {% if result.you_friends_in_ugtu == 'yes'  %}
+                                        Да
+                                    {% elif result.you_friends_in_ugtu == 'no' %}
+                                        Нет
+                                    {% elif result.you_friends_in_ugtu == 'not_know'  %}
+                                        Не знаю
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    11. Хотел бы учиться в УГТУ?
+                                </td>
+                                <td>
+                                    {% if result.if_you_want_ugtu == 'no' %}
+                                        Нет, {{ result.text_no_if_you_want_ugtu }}
+                                    {% elif result.if_you_want_ugtu == 'yes_but_do_not'  %}
+                                        Хотел бы, но не буду. {{ result.text_yes_if_you_want_ugtu }}
+                                    {% elif result.if_you_want_ugtu == 'not_know'  %}
+                                        Не знаю
+                                    {% elif result.if_you_want_ugtu == 'yes'  %}
+                                        Да
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    12. С кем обсуждал разные профессии
+                                </td>
+                                <td>
+                                    {% for talk_about_pro in result.talk_about_prof.all %}
+                                        {{ talk_about_pro }};<br>
+                                    {% endfor %}
+                                    {% if result.text_talk_about_prof %}
+                                        Другое: {{ result.text_talk_about_prof }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    {% endfor %}

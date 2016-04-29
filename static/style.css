@@ -1,0 +1,97 @@
+.cut{
+    width: 70px !important;
+}
+
+.big-cut{
+    width: 150px !important;
+}
+
+.lgt{
+    font-size:20px;
+}
+
+/*.navbar-inverse {*/
+    /*background-color: #337AB7;*/
+    /*border-color: #337AB7;*/
+/*}*/
+
+/*.navbar-inverse .navbar-brand{*/
+    /*color: #fff;*/
+/*}*/
+
+
+/*.navbar-inverse .navbar-nav>li>a {*/
+    /*color: #fff;*/
+/*}*/
+
+/*.navbar-inverse .navbar-nav>li>a:hover {*/
+    /*background: #4692D4;*/
+    /*color: #fff;*/
+/*}*/
+
+/*.navbar {*/
+    /*border-radius: 0;*/
+/*}*/
+
+td {
+    padding: 1px 7px;
+}
+
+
+@media print{
+    .protocol{
+        border: none;
+    }
+}
+
+.marg-icon{
+    margin-right: 10px;
+    font-size: 20px;
+    vertical-align: -3px;
+}
+
+.ugtu-logo{
+    height: 100px;
+}
+
+.dn{
+    display: none;
+}
+
+.ddown-menu{
+    margin: 10px 0;
+}
+
+.bbgrey{
+    border-bottom: 1px solid #f1f1f1;
+    margin: 10px;
+}
+
+.table td {
+    vertical-align: middle !important;
+}
+
+.table-interests td, .table-interests th{
+    padding: 5px;
+    border: 1px solid #ddd;
+}
+.table-interests th{
+    background: #f5f5f5;
+}
+.table-interests table{
+    width: 100% !important;
+}
+
+.cp {
+    cursor: pointer;
+}
+
+#testform .form-group {
+    margin-bottom: 35px;
+}
+
+.summary-div{
+    border: 1px solid #f1f1f1;
+    padding: 20px;
+    margin: 20px 0;
+}

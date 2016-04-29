@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/script.js"></script>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap_cosmo.css" type="text/css">
+    <link rel="stylesheet" href="/static/style.css" type="text/css">
+</head>
+<body>
+
+{% if request.user.is_superuser %}
+    {% include "menu.html" %}
+{% else %}
+{#    <div class="container">#}
+{#        <div class="row">#}
+{#            <div class="col-md-8 col-md-offset-2">#}
+{#                <div class="row">#}
+{#                    <div class="col-md-3">#}
+{#                        <img src="/static/ugtu_sm.png" alt="UGTU" class="ugtu-logo">#}
+{#                    </div>#}
+{#                    <div class="col-md-9 text-left">#}
+{#                        <br>#}
+{#                        <p class="text-muted">Федеральное государственное бюджетное образовательное учреждение высшего профессионального образования «Ухтинский государственный технический университет»</p>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{% endif %}
+
+
+<div class="container">
+    {% block content %}
+
+    {% endblock %}
+</div>
+
+</body>
+</html>

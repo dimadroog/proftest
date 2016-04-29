@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+        <h2 class="text-center">Заполненные анкеты</h2>
+
+        {% if group == 'junior' %}
+            <h4 class="text-center">Учащиеся <b>5-6-7</b> классов</h4>
+            <br>
+            {% include 'tests/result_junior.html' %}
+        {% elif group == 'middle' %}
+            <h4 class="text-center">Учащиеся <b>8-9</b> классов</h4>
+            <br>
+            {% include 'tests/result_middle.html' %}
+        {% elif group == 'senior' %}
+            <h4 class="text-center">Учащиеся <b>10-11</b> классов</h4>
+            <br>
+            {% include 'tests/result_senior.html' %}
+        {% endif %}
+
+<nav class="text-center">
+<ul class="pagination">
+    {% if results.paginator.page_range|length > 1 %}
+        {% if results.has_previous %}
+            <li><a href="?page=1"><<</a></li>
+            <li><a href="?page={{ results.previous_page_number }}"><</a></li>
+        {% endif %}
+        {% for page in results.paginator.page_range %}
+            {% with results.number|add:"-5" as page_min %}
+                {% with results.number|add:"5" as page_max %}
+                    {% if page >= page_min and page <= page_max %}
+                        {% if results.number == page %}
+                            <li class="active"><a href="#">{{ page }}</a></li>
+                        {% else %}
+                            <li><a href="?page={{ page }}">{{ page }}</a></li>
+                        {% endif %}
+                    {% endif %}
+                {% endwith %}
+            {% endwith %}
+        {% endfor %}
+        {% if results.has_next %}
+            <li><a href="?page={{ results.next_page_number }}">></a></li>
+            <li><a href="?page={{ results.paginator.num_pages }}">>></a></li>
+        {% endif %}
+    {% endif %}
+</ul>
+</nav>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+        <h2 class="text-center">Сводные результаты</h2>
+
+        {% if group == 'junior' %}
+            <h4 class="text-center">Учащиеся <b>5-6-7</b> классов</h4>
+            {% if request.GET.school %}
+                <h4 class="text-center">{{ schools }}</h4>
+            {% endif %}
+            <br>
+            {% include 'tests/summary_junior.html' %}
+        {% elif group == 'middle' %}
+            <h4 class="text-center">Учащиеся <b>8-9</b> классов</h4>
+            {% if request.GET.school %}
+                <h4 class="text-center">{{ schools }}</h4>
+            {% endif %}
+            <br>
+            {% include 'tests/summary_middle.html' %}
+        {% elif group == 'senior' %}
+            <h4 class="text-center">Учащиеся <b>10-11</b> классов</h4>
+            {% if request.GET.school %}
+                <h4 class="text-center">{{ schools }}</h4>
+            {% endif %}
+            <br>
+            {% include 'tests/summary_senior.html' %}
+        {% endif %}
+
+{% endblock %}

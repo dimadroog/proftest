@@ -1,0 +1,273 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2 panel panel-default protocol">
+      <p class="hidden-print text-right"><a href="#" onclick="alert('Перед тем как распечатать протокол, убедитесь что в настройках печати поля и колонтитулы настроены по умолчанию.'), print()"><span class="glyphicon-print glyphicon marg-icon" aria-hidden="true"></span>Распечатать</a></p>
+
+      <div class="panel-body">
+          <h3 class="text-center text-uppercase">протокол</h3>
+          <p class="text-center"><b>социально-психологического тестирования, направленного на раннее выявление
+              немедецинского потребления накотических средств и психотропных вещевств</b></p>
+
+          <p>Дата заполнения:___________________________________________________</p>
+          <p>Населеный пункт:___________________________________________________</p>
+          <p>Образовательная организация:_______________________________________</p>
+          <p>Общее количество заполненных анкет: {{ group_cnt }}</p>
+          <br>
+
+         <table border="1" cellpadding="1" cellspacing="1" class="table-bordered">
+            <tbody>
+                <tr>
+                    <td colspan="1" rowspan="3">Факторы риска</td>
+                    <td colspan="1" rowspan="3">Уровень риска</td>
+                    <td colspan="6" rowspan="1" class="text-center">Количество респондентов</td>
+                </tr>
+                <tr>
+                    <td colspan="2" rowspan="1" class="text-center">13-14 лет</td>
+                    <td colspan="2" rowspan="1" class="text-center">15-18 лет</td>
+                    <td colspan="2" rowspan="1" class="text-center">18 лет +</td>
+                </tr>
+                <tr>
+                    <td style="width: 50px" class="text-center">Абс.</td>
+                    <td style="width: 50px" class="text-center">&nbsp;%</td>
+                    <td style="width: 50px" class="text-center">Абс.</td>
+                    <td style="width: 50px" class="text-center">&nbsp;%</td>
+                    <td style="width: 50px" class="text-center">Абс.</td>
+                    <td style="width: 50px" class="text-center">&nbsp;%</td>
+                </tr>
+                <tr>
+                    <td colspan="1" rowspan="4">Общий уровень риска</td>
+                    <td>высокий</td>
+                    <td class="text-center">{{ jun.hi.total.abs }}</td>
+                    <td class="text-center">{{ jun.hi.total.pct }}</td>
+                    <td class="text-center">{{ mid.hi.total.abs }}</td>
+                    <td class="text-center">{{ mid.hi.total.pct }}</td>
+                    <td class="text-center">{{ sen.hi.total.abs }}</td>
+                    <td class="text-center">{{ sen.hi.total.pct }}</td>
+                </tr>
+                <tr>
+                    <td>средний</td>
+                    <td class="text-center">{{ jun.mid.total.abs }}</td>
+                    <td class="text-center">{{ jun.mid.total.pct }}</td>
+                    <td class="text-center">{{ mid.mid.total.abs }}</td>
+                    <td class="text-center">{{ mid.mid.total.pct }}</td>
+                    <td class="text-center">{{ sen.mid.total.abs }}</td>
+                    <td class="text-center">{{ sen.mid.total.pct }}</td>
+                </tr>
+                <tr>
+                    <td>низкий</td>
+                    <td class="text-center">{{ jun.low.total.abs }}</td>
+                    <td class="text-center">{{ jun.low.total.pct }}</td>
+                    <td class="text-center">{{ mid.low.total.abs }}</td>
+                    <td class="text-center">{{ mid.low.total.pct }}</td>
+                    <td class="text-center">{{ sen.low.total.abs }}</td>
+                    <td class="text-center">{{ sen.low.total.pct }}</td>
+                </tr>
+                <tr>
+                    <td>нет риска</td>
+                    <td class="text-center">{{ jun.no.total.abs }}</td>
+                    <td class="text-center">{{ jun.no.total.pct }}</td>
+                    <td class="text-center">{{ mid.no.total.abs }}</td>
+                    <td class="text-center">{{ mid.no.total.pct }}</td>
+                    <td class="text-center">{{ sen.no.total.abs }}</td>
+                    <td class="text-center">{{ sen.no.total.pct }}</td>
+                </tr>
+                <tr>
+                    <td colspan="1" rowspan="4">Семейные</td>
+                    <td>высокий</td>
+                    <td class="text-center">{{ jun.hi.fam.abs }}</td>
+                    <td class="text-center">{{ jun.hi.fam.pct }}</td>
+                    <td class="text-center">{{ mid.hi.fam.abs }}</td>
+                    <td class="text-center">{{ mid.hi.fam.pct }}</td>
+                    <td class="text-center">{{ sen.hi.fam.abs }}</td>
+                    <td class="text-center">{{ sen.hi.fam.pct }}</td>
+                </tr>
+                <tr>
+                    <td>средний</td>
+                    <td class="text-center">{{ jun.mid.fam.abs }}</td>
+                    <td class="text-center">{{ jun.mid.fam.pct }}</td>
+                    <td class="text-center">{{ mid.mid.fam.abs }}</td>
+                    <td class="text-center">{{ mid.mid.fam.pct }}</td>
+                    <td class="text-center">{{ sen.mid.fam.abs }}</td>
+                    <td class="text-center">{{ sen.mid.fam.pct }}</td>
+                </tr>
+                <tr>
+                    <td>низкий</td>
+                    <td class="text-center">{{ jun.low.fam.abs }}</td>
+                    <td class="text-center">{{ jun.low.fam.pct }}</td>
+                    <td class="text-center">{{ mid.low.fam.abs }}</td>
+                    <td class="text-center">{{ mid.low.fam.pct }}</td>
+                    <td class="text-center">{{ sen.low.fam.abs }}</td>
+                    <td class="text-center">{{ sen.low.fam.pct }}</td>
+                </tr>
+                <tr>
+                    <td>нет риска</td>
+                    <td class="text-center">{{ jun.no.fam.abs }}</td>
+                    <td class="text-center">{{ jun.no.fam.pct }}</td>
+                    <td class="text-center">{{ mid.no.fam.abs }}</td>
+                    <td class="text-center">{{ mid.no.fam.pct }}</td>
+                    <td class="text-center">{{ sen.no.fam.abs }}</td>
+                    <td class="text-center">{{ sen.no.fam.pct }}</td>
+                </tr>
+                <tr>
+                    <td colspan="1" rowspan="4">Индивидуальные</td>
+                    <td>высокий</td>
+                    <td class="text-center">{{ jun.hi.ind.abs }}</td>
+                    <td class="text-center">{{ jun.hi.ind.pct }}</td>
+                    <td class="text-center">{{ mid.hi.ind.abs }}</td>
+                    <td class="text-center">{{ mid.hi.ind.pct }}</td>
+                    <td class="text-center">{{ sen.hi.ind.abs }}</td>
+                    <td class="text-center">{{ sen.hi.ind.pct }}</td>
+                </tr>
+                <tr>
+                    <td>средний</td>
+                    <td class="text-center">{{ jun.mid.ind.abs }}</td>
+                    <td class="text-center">{{ jun.mid.ind.pct }}</td>
+                    <td class="text-center">{{ mid.mid.ind.abs }}</td>
+                    <td class="text-center">{{ mid.mid.ind.pct }}</td>
+                    <td class="text-center">{{ sen.mid.ind.abs }}</td>
+                    <td class="text-center">{{ sen.mid.ind.pct }}</td>
+                </tr>
+                <tr>
+                    <td>низкий</td>
+                    <td class="text-center">{{ jun.low.ind.abs }}</td>
+                    <td class="text-center">{{ jun.low.ind.pct }}</td>
+                    <td class="text-center">{{ mid.low.ind.abs }}</td>
+                    <td class="text-center">{{ mid.low.ind.pct }}</td>
+                    <td class="text-center">{{ sen.low.ind.abs }}</td>
+                    <td class="text-center">{{ sen.low.ind.pct }}</td>
+                </tr>
+                <tr>
+                    <td>нет риска</td>
+                    <td class="text-center">{{ jun.no.ind.abs }}</td>
+                    <td class="text-center">{{ jun.no.ind.pct }}</td>
+                    <td class="text-center">{{ mid.no.ind.abs }}</td>
+                    <td class="text-center">{{ mid.no.ind.pct }}</td>
+                    <td class="text-center">{{ sen.no.ind.abs }}</td>
+                    <td class="text-center">{{ sen.no.ind.pct }}</td>
+                </tr>
+                <tr>
+                    <td colspan="1" rowspan="4">Средовые</td>
+                    <td>высокий</td>
+                    <td class="text-center">{{ jun.hi.scope.abs }}</td>
+                    <td class="text-center">{{ jun.hi.scope.pct }}</td>
+                    <td class="text-center">{{ mid.hi.scope.abs }}</td>
+                    <td class="text-center">{{ mid.hi.scope.pct }}</td>
+                    <td class="text-center">{{ sen.hi.scope.abs }}</td>
+                    <td class="text-center">{{ sen.hi.scope.pct }}</td>
+                </tr>
+                <tr>
+                    <td>средний</td>
+                    <td class="text-center">{{ jun.mid.scope.abs }}</td>
+                    <td class="text-center">{{ jun.mid.scope.pct }}</td>
+                    <td class="text-center">{{ mid.mid.scope.abs }}</td>
+                    <td class="text-center">{{ mid.mid.scope.pct }}</td>
+                    <td class="text-center">{{ sen.mid.scope.abs }}</td>
+                    <td class="text-center">{{ sen.mid.scope.pct }}</td>
+                </tr>
+                <tr>
+                    <td>низкий</td>
+                    <td class="text-center">{{ jun.low.scope.abs }}</td>
+                    <td class="text-center">{{ jun.low.scope.pct }}</td>
+                    <td class="text-center">{{ mid.low.scope.abs }}</td>
+                    <td class="text-center">{{ mid.low.scope.pct }}</td>
+                    <td class="text-center">{{ sen.low.scope.abs }}</td>
+                    <td class="text-center">{{ sen.low.scope.pct }}</td>
+                </tr>
+                <tr>
+                    <td>нет риска</td>
+                    <td class="text-center">{{ jun.no.scope.abs }}</td>
+                    <td class="text-center">{{ jun.no.scope.pct }}</td>
+                    <td class="text-center">{{ mid.no.scope.abs }}</td>
+                    <td class="text-center">{{ mid.no.scope.pct }}</td>
+                    <td class="text-center">{{ sen.no.scope.abs }}</td>
+                    <td class="text-center">{{ sen.no.scope.pct }}</td>
+                </tr>
+                <tr>
+                    <td colspan="1" rowspan="4">Общественные</td>
+                    <td>высокий</td>
+                    <td class="text-center">{{ jun.hi.soc.abs }}</td>
+                    <td class="text-center">{{ jun.hi.soc.pct }}</td>
+                    <td class="text-center">{{ mid.hi.soc.abs }}</td>
+                    <td class="text-center">{{ mid.hi.soc.pct }}</td>
+                    <td class="text-center">{{ sen.hi.soc.abs }}</td>
+                    <td class="text-center">{{ sen.hi.soc.pct }}</td>
+                </tr>
+                <tr>
+                    <td>средний</td>
+                    <td class="text-center">{{ jun.mid.soc.abs }}</td>
+                    <td class="text-center">{{ jun.mid.soc.pct }}</td>
+                    <td class="text-center">{{ mid.mid.soc.abs }}</td>
+                    <td class="text-center">{{ mid.mid.soc.pct }}</td>
+                    <td class="text-center">{{ sen.mid.soc.abs }}</td>
+                    <td class="text-center">{{ sen.mid.soc.pct }}</td>
+                </tr>
+                <tr>
+                    <td>низкий</td>
+                    <td class="text-center">{{ jun.low.soc.abs }}</td>
+                    <td class="text-center">{{ jun.low.soc.pct }}</td>
+                    <td class="text-center">{{ mid.low.soc.abs }}</td>
+                    <td class="text-center">{{ mid.low.soc.pct }}</td>
+                    <td class="text-center">{{ sen.low.soc.abs }}</td>
+                    <td class="text-center">{{ sen.low.soc.pct }}</td>
+                </tr>
+                <tr>
+                    <td>нет риска</td>
+                    <td class="text-center">{{ jun.no.soc.abs }}</td>
+                    <td class="text-center">{{ jun.no.soc.pct }}</td>
+                    <td class="text-center">{{ mid.no.soc.abs }}</td>
+                    <td class="text-center">{{ mid.no.soc.pct }}</td>
+                    <td class="text-center">{{ sen.no.soc.abs }}</td>
+                    <td class="text-center">{{ sen.no.soc.pct }}</td>
+                </tr>
+                <tr>
+                    <td colspan="1" rowspan="4">
+                    <p><span style="font-family:helvetica neue,helvetica,arial,sans-serif; font-size:14px">Связанные с<br
+                            >учебным заведением</span></p>
+                    </td>
+                    <td>высокий</td>
+                    <td class="text-center">{{ jun.hi.scope.abs }}</td>
+                    <td class="text-center">{{ jun.hi.scope.pct }}</td>
+                    <td class="text-center">{{ mid.hi.scope.abs }}</td>
+                    <td class="text-center">{{ mid.hi.scope.pct }}</td>
+                    <td class="text-center">{{ sen.hi.scope.abs }}</td>
+                    <td class="text-center">{{ sen.hi.scope.pct }}</td>
+                </tr>
+                <tr>
+                    <td>средний</td>
+                    <td class="text-center">{{ jun.mid.scope.abs }}</td>
+                    <td class="text-center">{{ jun.mid.scope.pct }}</td>
+                    <td class="text-center">{{ mid.mid.scope.abs }}</td>
+                    <td class="text-center">{{ mid.mid.scope.pct }}</td>
+                    <td class="text-center">{{ sen.mid.scope.abs }}</td>
+                    <td class="text-center">{{ sen.mid.scope.pct }}</td>
+                </tr>
+                <tr>
+                    <td>низкий</td>
+                    <td class="text-center">{{ jun.low.scope.abs }}</td>
+                    <td class="text-center">{{ jun.low.scope.pct }}</td>
+                    <td class="text-center">{{ mid.low.scope.abs }}</td>
+                    <td class="text-center">{{ mid.low.scope.pct }}</td>
+                    <td class="text-center">{{ sen.low.scope.abs }}</td>
+                    <td class="text-center">{{ sen.low.scope.pct }}</td>
+                </tr>
+                <tr>
+                    <td>нет риска</td>
+                    <td class="text-center">{{ jun.no.scope.abs }}</td>
+                    <td class="text-center">{{ jun.no.scope.pct }}</td>
+                    <td class="text-center">{{ mid.no.scope.abs }}</td>
+                    <td class="text-center">{{ mid.no.scope.pct }}</td>
+                    <td class="text-center">{{ sen.no.scope.abs }}</td>
+                    <td class="text-center">{{ sen.no.scope.pct }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+      </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

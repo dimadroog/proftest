@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="row">
+                <div class="col-md-3">
+                    <img src="/static/ugtu_sm.png" alt="UGTU" class="ugtu-logo">
+                </div>
+                <div class="col-md-9 text-left">
+                    <br>
+                    <p class="text-muted">Федеральное государственное бюджетное образовательное учреждение высшего профессионального образования «Ухтинский государственный технический университет»</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-md-8 col-md-offset-2 panel panel-default">
+      <div class="panel-body">
+          <h3 class="text-center text-uppercase">УВАЖАЕМЫЙ УЧЕНИК!</h3>
+          <p>Просим тебя принять участие в опросе – заполнить анкету.</p>
+          <p>Пожалуйста, отвечая на вопросы, ПОСТАВЬ ГАЛОЧКУ НАПРОТИВ ОТВЕТА или ВПИШИ СВОЙ ВАРИАНТ, наиболее точно отражающий ТВОЕ МНЕНИЕ.</p>
+      </div>
+  </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2 panel panel-default">
+        <div class="panel-body">
+            <form id="testform" action="" class="form-group" method="post" onsubmit="BuildInterests()">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="school">1. В какой ШКОЛЕ ты учишься?</label>
+                    <select type="text" class="form-control" id="school" name="school" required>
+                        <option value="">Выбери из списка</option>
+                    {% for school in schools %}
+                        <option value="{{ school.id }}">{{ school.name }}</option>
+                    {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="school_class">2. В каком КЛАССЕ ты учишься?</label>
+                    <select type="text" class="form-control" id="school_class" name="school_class" required>
+                        <option value="">Выбери из списка</option>
+                        <option value="8">8 Класс</option>
+                        <option value="9">9 Класс</option>
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="school_class">3 . ТВОЙ ПОЛ:</label>
+                    <select type="text" class="form-control" id="gender" name="gender" required>
+                        <option value="">Выбери из списка</option>
+                        <option value="male">Мужской</option>
+                        <option value="female">Женский</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="like_learn_subject">4. ОТМЕТЬ ГАЛОЧКАМИ СВОИ САМЫЕ ЛЮБИМЫЕ ПРЕДМЕТЫ (Но не более четырех)</label><br>
+                    {% for learn_subject in learn_subjects %}
+                        <input class="learn-subject-checkbox" type="checkbox" name="like_learn_subject" value="{{ learn_subject.id }}"> {{ learn_subject.name }}<br>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label for="deep_learn_subject">5. ЗАНИМАЕШЬСЯ ЛИ ТЫ УГЛУБЛЕННО КАКИМИ-ЛИБО ПРЕДМЕТАМИ? Если да, то выбери из списка, каким именно</label><br>
+                    {% for deep_learn_subject in deep_learn_subjects %}
+                        <input class="learn-subject-checkbox" type="checkbox" name="deep_learn_subject" value="{{ deep_learn_subject.id }}"> {{ deep_learn_subject.name }}<br>
+                    {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="hobby">6. ЗАНИМАЕШЬСЯ ЛИ ТЫ В КАКОМ-ЛИБО КРУЖКЕ, СЕКЦИИ ИЛИ МУЗЫКАЛЬНОЙ ШКОЛЕ?</label><br>
+                    <input required id="no" type="radio" name="hobby" value="no" class="rad"> Нет<br>
+                    <input required id="yes" type="radio" name="hobby" value="yes" class="rad"> Да<br>
+                    <input type="text" class="form-control dn" id="hobby" name="text_hobby" oninput="StayCheck(this)">
+                    <span class="help-block dn">Если ДА, то где именно?</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="future_prof">7.ТЫ УЖЕ ВЫБРАЛ(а) СВОЮ БУДУЩУЮ ПРОФЕССИЮ?</label><br>
+                    <div>
+                        <input required id="" type="radio" name="future_prof" value="yes" class="self-var-radio"> Да. Я выбрал(а) профессию<br>
+                        <input type="text" class="form-control dn" id="future_prof" name="text_yes_future_prof" oninput="StayCheck(this)">
+                        <span class="help-block dn">Укажи какую</span>
+                    </div>
+                    <div>
+                        <input required id="" type="radio" name="future_prof" value="addict" class="self-var-radio"> Пока сомневаюсь, но склоняюсь к...<br>
+                        <input type="text" class="form-control dn" id="future_prof" name="text_addict_future_prof" oninput="StayCheck(this)">
+                        <span class="help-block dn">Укажи 1-2</span>
+                    </div>
+                    <input required id="" type="radio" name="future_prof" value="not_think" class="rad11"> Нет - еще не задумывался над этим<br>
+                    <input required id="" type="radio" name="future_prof" value="not_know_myself" class="rad11"> Нет - плохо знаю свои способности<br>
+                    <input required id="" type="radio" name="future_prof" value="not_know_how_choose" class="rad11"> Нет - не знаю, как выбирать профессию<br>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="priority_prof">8. ЧТО ДЛЯ ТЕБЯ ВАЖНЕЕ ВСЕГО ПРИ ВЫБОРЕ БУДУЩЕЙ ПРОФЕССИИ?</label><br>
+                    {% for priority_pro in priority_prof %}
+                        <input class="priority-prof-checkbox" type="checkbox" name="priority_prof" value="{{ priority_pro.id }}"> {{ priority_pro.name }}<br>
+                    {% endfor %}
+                    <input class="self-var-checkbox" id="self_var" type="checkbox" name="" value=""> Другое<br>
+                    <input type="text" class="form-control dn" name="text_priority_prof">
+                    <span class="help-block dn">Укажи свой вариант.</span>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="talk_about_prof">9. ОБСУЖДАЛ(а) ЛИ ТЫ С КЕМ-НИБУДЬ РАЗНЫЕ ПРОФЕССИИ (или как выбрать профессию)?</label><br>
+                    {% for talker_prof in talkers_prof %}
+                        <input class="learn-subject-checkbox" type="checkbox" name="talk_about_prof" value="{{ talker_prof.id }}"> {{ talker_prof.name }}<br>
+                    {% endfor %}
+                    <input class="self-var-checkbox" id="self_var" type="checkbox" name="" value=""> Да, Другое<br>
+                    <input type="text" class="form-control dn" name="text_talk_about_prof">
+                    <span class="help-block dn">Укажи, если беседовал с кем-то другим.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="help_prof_choice">10. НУЖНА ЛИ ТЕБЕ КАКАЯ-ЛИБО ПОМОЩЬ В ВЫБОРЕ ПОДХОДЯЩЕЙ ДЛЯ ТЕБЯ ПРОФЕССИИ, НАПРИМЕР</label><br>
+                    {% for help_prof_choice in help_prof_choices %}
+                        <input class="" type="checkbox" name="help_prof_choice" value="{{ help_prof_choice.id }}"> {{ help_prof_choice.name }}<br>
+                    {% endfor %}
+                    <div>
+                        <input id="" type="checkbox" name="help_prof_choice" value="" class="self-var-checkbox"> Другое<br>
+                        <input type="text" class="form-control dn" id="future_prof" name="text_help_prof_choice" oninput="StayCheck(this)">
+                        <span class="help-block dn">Опиши, что именно </span>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="after_nine_class">11. ЧТО ТЫ ПЛАНИРУЕШЬ ДЕЛАТЬ ПОСЛЕ 9 КЛАССА?</label><br>
+                    <input class="anoter-var-radio" type="radio" name="after_nine_class" value="school"> Продолжить обучение в школе в 10-11 классах<br>
+                    <input class="anoter-var-radio" type="radio" name="after_nine_class" value="college"> Уйти из школы, поступить в колледж, училище<br>
+                    <input class="anoter-var-radio" type="radio" name="after_nine_class" value="not_know"> Я еще не определился в своих планах<br>
+                    <div>
+                        <input required id="" type="radio" name="after_nine_class" value="" class="self-var-radio"> Другое<br>
+                        <input type="text" class="form-control dn" id="future_prof" name="text_after_nine_class">
+                        <span class="help-block dn">Опиши, что именно </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="have_chosen_inst">12. ТЫ УЖЕ ВЫБРАЛ(а) УЧЕБНОЕ ЗАВЕДЕНИЕ (вуз/колледж/техникум), КУДА БУДЕШЬ ПОСТУПАТЬ ПОСЛЕ ШКОЛЫ?</label><br>
+                    <div>
+                        <input required id="" type="radio" name="have_chosen_inst" value="one" class="self-var-radio"> Да, я выбрал(а) <b>конкретное</b> учебное заведение<br>
+                        <input type="text" class="form-control dn" id="future_prof" name="text_one_have_chosen_inst">
+                        <span class="help-block dn">Укажи название </span>
+                    </div>
+                    <div>
+                        <input required id="" type="radio" name="have_chosen_inst" value="many" class="self-var-radio"> Я попробую поступать в <b>несколько</b> учебных заведений<br>
+                        <input type="text" class="form-control dn" id="future_prof" name="text_many_have_chosen_inst">
+                        <span class="help-block dn">Укажи названия </span>
+                    </div>
+                    <input class="anoter-var-radio" type="radio" name="have_chosen_inst" value="not_know"> Я еще не выбрал(а)<br>
+                    <input class="anoter-var-radio" type="radio" name="have_chosen_inst" value="not"> Не выбрал, т.к. не собираюсь поступать в учебное заведение сразу после школы<br>
+                </div>
+
+                <div class="form-group">
+                    <label for="have_chosen_training">13. ТЫ УЖЕ ВЫБРАЛ(а) НАПРАВЛЕНИЕ ПОДГОТОВКИ (СПЕЦИАЛЬНОСТЬ), КУДА БУДЕШЬ ПОСТУПАТЬ ПОСЛЕ ШКОЛЫ?</label><br>
+                    <div>
+                        <input required id="" type="radio" name="have_chosen_training" value="one" class="self-var-radio"> Да, я выбрал(а) <b>конкретное</b> направление подготовки/специальность<br>
+                        <input type="text" class="form-control dn" id="future_prof" name="text_one_have_chosen_training">
+                        <span class="help-block dn">Укажи название </span>
+                    </div>
+                    <div>
+                        <input required id="" type="radio" name="have_chosen_training" value="many" class="self-var-radio"> Я попробую поступать на <b>несколько</b> направлений подготовки<br>
+                        <input type="text" class="form-control dn" id="future_prof" name="text_many_have_chosen_training">
+                        <span class="help-block dn">Укажи названия </span>
+                    </div>
+                    <input class="anoter-var-radio" type="radio" name="have_chosen_training" value="not_know"> Я еще не выбрал(а)<br>
+                    <input class="anoter-var-radio" type="radio" name="have_chosen_training" value="not"> Не выбрал, т.к. не собираюсь поступать в учебное заведение сразу после школы<br>
+                </div>
+
+                <div class="form-group">
+                    <label for="if_you_want_ugtu">14. ХОТЕЛ(а) БЫ ТЫ УЧИТЬСЯ В УГТУ?</label><br>
+                    <input required id="yes" type="radio" name="if_you_want_ugtu" value="yes" class="rad11"> Да<br>
+                    <div>
+                        <input required id="yes_but_do_not" type="radio" name="if_you_want_ugtu" value="yes_but_do_not" class="rad11"> Хотел бы, но не буду<br>
+                        <input type="text" class="form-control dn" id="if_you_want_ugtu" name="text_yes_if_you_want_ugtu" oninput="StayCheck(this)">
+                        <span class="help-block dn">Напиши, почему?</span>
+                    </div>
+                    <div>
+                        <input required id="no" type="radio" name="if_you_want_ugtu" value="no" class="rad11"> Нет<br>
+                        <input type="text" class="form-control dn" id="if_you_want_ugtu" name="text_no_if_you_want_ugtu" oninput="StayCheck(this)">
+                        <span class="help-block dn">Напиши, почему?</span>
+                    </div>
+                    <input required id="school" type="radio" name="if_you_want_ugtu" value="not_know" class="rad11"> Пока не знаю<br>
+                </div>
+
+                <div class="form-group">
+                    <label for="if_you_want_ugtu_training">15. ХОТЕЛ(а) БЫ ТЫ ДЛЯ ПОВЫШЕНИЯ УРОВНЯ ЗНАНИЙ ПЕРЕД ГИА / ЕГЭ ПОСЕЩАТЬ ПОДГОТОВИТЕЛЬНЫЕ КУРСЫ В УГТУ (платно)?</label><br>
+                    <div>
+                        <input required id="" type="radio" name="if_you_want_ugtu_training" value="yes" class="self-var-radio"> Да<br>
+                        <input type="text" class="form-control dn" id="future_prof" name="text_if_you_want_ugtu_training">
+                        <span class="help-block dn">По какому предмету?</span>
+                    </div>
+                    <input class="anoter-var-radio" type="radio" name="if_you_want_ugtu_training" value="no_money"> Хотел(а) бы, но нет возможности, т.к. курсы платные<br>
+                    <input class="anoter-var-radio" type="radio" name="if_you_want_ugtu_training" value="no"> Нет<br>
+                    <input class="anoter-var-radio" type="radio" name="if_you_want_ugtu_training" value="already"> Уже посещаю<br>
+                </div>
+
+                <div class="form-group">
+                    <label for="after_nine_class">No 16. УКАЖИ В ТАБЛИЦЕ СВОИ ИНТЕРЕСЫ И УВЛЕЧЕНИЯ, А ТАКЖЕ ДОСТИЖЕНИЯ:</label><br>
+                    <span class="help-block">Можно отметить несколько вариантов и дописать свой ответ, если нужно</span>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Метка
+                                    </th>
+                                    <th>
+                                        Интересы
+                                    </th>
+                                    <th>
+                                        Есть ли достижения в указанных сферах
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for interest in interests %}
+                                    <tr class="interest-tr">
+                                        <td>
+                                            <input type="checkbox" class="interest-checkbox">
+                                        </td>
+                                        <td>
+                                            {{ interest.name }}
+                                            <span class="dn interest-id">{{ interest.id }}</span>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" placeholder="{{ interest.help_text|default_if_none:'' }}" name="interest_progress" oninput="StayCheckInterests(this)">
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <input id="build_interests" type="text" class="form-control dn" name="build_interests">
+                </div>
+
+                <div class="form-group">
+                    <label for="after_nine_class">17. УКАЖИ СВОИ ФИО, КОНТАКТНЫЙ ТЕЛЕФОН или E-MAIL, если хочешь получать информацию по интересующим тебя направлениям подготовки и другим вопросам поступления:</label><br>
+                    <label for="">Фамилия</label>
+                    <input type="text" class="form-control" name="subscribe_last_name">
+                    <label for="">Имя</label>
+                    <input type="text" class="form-control" name="subscribe_first_name">
+                    <label for="">Отчество</label>
+                    <input type="text" class="form-control" name="subscribe_middle_name">
+                    <label for="">Телефон</label>
+                    <input type="text" class="form-control" name="subscribe_phone">
+                    <label for="">E-mail</label>
+                    <input type="email" class="form-control" name="subscribe_email">
+                </div>
+
+                <div class=" text-center">
+                    <input type="submit" class="btn btn-primary" value="Отправить">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+{% endblock %}

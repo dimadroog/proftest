@@ -1,0 +1,384 @@
+{% load tests_extras %}
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="summary-div">В данной возврастной категории было опрошенно <strong class="text-success text-st">{{ results.count }}</strong> респондентов.</div>
+
+        <div class="summary-div">
+            <p><b>1. Из них по учебным заведениям:</b></p>
+            {% if request.GET.school %}
+                <p>Результаты только для - {{ schools.name }}</p>
+                <p><a href="{% url 'summary' 'senior' %}">Вернуться к результатам для всех школ</a></p>
+            {% else %}
+                {% for school in schools.all  %}
+                    {% if school.senior_set.all.count > 0 %}
+                        <a href="?school={{ school.id }}">{{ school }}</a> -
+                        <b class="text-success">{{ school.senior_set.all.count }}</b>
+                        <span class="text-muted">({{ school.senior_set.all.count|percent:results.count }} %)</span>;
+                        <br>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+
+
+        <div class="summary-div">
+            {% count_by_str results 'school_class' '10 11' as countall %}
+            <p><b>2. Из них обучаются:</b></p>
+            {% for key, value in countall.items %}
+                В {{ key }} Классе - <b class="text-success">{{ value }}</b>
+                <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                <br>
+            {% endfor %}
+        </div>
+
+        <div class="summary-div">
+            {% count_by_str results 'gender' 'male female' as countall %}
+            <p><b>3. Пол:</b></p>
+            {% for key, value in countall.items %}
+                 {% if key == 'male' %}
+                    Мужской - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;<br>
+                {% elif key == 'female' %}
+                    Женский - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;<br>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="summary-div">
+            <p><b>4. Выбор будующей профессии:</b></p>
+            {% count_by_str results 'future_prof' 'yes addict not_think not_know_myself not_know_how_choose' as countall %}
+            {% for key, value in countall.items %}
+                {% if key == 'yes' %}
+                    Да. Я выбрал(а) профессию - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'addict' %}
+                    Пока сомневаюсь, но склоняюсь к... - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'not_think' %}
+                    Нет - еще не задумывался над этим - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'not_know_myself' %}
+                    Нет - плохо знаю свои способности - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'not_know_how_choose' %}
+                    Нет - не знаю, как выбирать профессию - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% endif %}
+                <br>
+            {% endfor %}
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_yes_future_prof')">Четко указанные профессии</a>
+                <div class="other-answers"></div>
+            </div>
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_addict_future_prof')">Профессии к которым склоняются</a>
+                <div class="other-answers"></div>
+            </div>
+        </div>
+
+        <div class="summary-div">
+            <p><b>5. Нужна ли помощь в выборе профессии?</b></p>
+            {% for help_prof_choic in help_prof_choice %}
+                {{ help_prof_choic }} -  <b class="text-success">{{ help_prof_choic.sen_help_prof_choice.all.count }}</b>
+                <span class="text-muted">({{ help_prof_choic.sen_help_prof_choice.all.count|percent:results.count }} %)</span>;
+                <br>
+            {% endfor %}
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_help_prof_choice')">Свой вариант</a>
+                <div class="other-answers"></div>
+            </div>
+        </div>
+
+        <div class="summary-div">
+            <p><b>6. Что планирует делать после школы:</b></p>
+            {% count_by_str results 'after_school' 'high college work relax army not_know' as countall %}
+            {% for key, value in countall.items %}
+                {% if key == 'high' %}
+                    Получать высшее образование - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'college' %}
+                    Получать специальность в колледже, техникуме - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'work' %}
+                    Пойти работать сразу после школы - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'relax' %}
+                    Ничего не планирую делать, хочу отдохнуть от учебы - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'army' %}
+                    Уйти в армию - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'not_know' %}
+                    Я пока не знаю - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% endif %}
+                <br>
+            {% endfor %}
+
+            {% count_others results 'after_school' as count_others %}
+            Свой вариант - <b class="text-success">{{ count_others }}</b>
+            <span class="text-muted">({{ count_others|percent:results.count }} %)</span>;<br>
+
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_after_school')">Свой вариант</a>
+                <div class="other-answers"></div>
+            </div>
+        </div>
+
+        <div class="summary-div">
+            <p><b>7. Выбрал ли уч. заведение для поступления?:</b></p>
+            {% count_by_str results 'have_chosen_inst' 'one many not_know not' as countall %}
+            {% for key, value in countall.items %}
+                {% if key == 'one' %}
+                    Да, я выбрал(а) конкретное учебное заведение - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'many' %}
+                    Я попробую поступать в несколько учебных заведений - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'not_know' %}
+                    Я еще не выбрал(а) - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'not' %}
+                    Не выбрал, т.к. не собираюсь поступать в учебное заведение сразу после школы - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% endif %}
+                <br>
+            {% endfor %}
+
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_one_have_chosen_inst')">Указали конкретные учебные заведения</a>
+                <div class="other-answers"></div>
+            </div>
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_many_have_chosen_inst')">Указали несколько учебных заведений</a>
+                <div class="other-answers"></div>
+            </div>
+        </div>
+
+        <div class="summary-div">
+            <p><b>8. Критерии выбора ВУЗа:</b></p>
+            {% for why_this_ins in why_this_inst %}
+                    {{ why_this_ins }} -  <b class="text-success">{{ why_this_ins.sen_why_this_inst.all.count }}</b>
+                    <span class="text-muted">({{ why_this_ins.sen_why_this_inst.all.count|percent:results.count }} %)</span>;
+                <br>
+            {% endfor %}
+
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_why_this_inst')">Свой вариант</a>
+                <div class="other-answers"></div>
+            </div>
+        </div>
+
+        <div class="summary-div">
+            <p><b>9. Выбрал ли направление подготовки?:</b></p>
+            {% count_by_str results 'have_chosen_training' 'one many not_know not' as countall %}
+            {% for key, value in countall.items %}
+                {% if key == 'one' %}
+                     Да, я выбрал(а) конкретное направление подготовки/специальность - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'many' %}
+                    Я попробую поступать на несколько направлений подготовки - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'not_know' %}
+                    Я еще не выбрал(а) - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% endif %}
+                <br>
+            {% endfor %}
+
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_one_have_chosen_training')">Указали конкретные направления подготовки</a>
+                <div class="other-answers"></div>
+            </div>
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_many_have_chosen_training')">Указали несколько направлений подготовки</a>
+                <div class="other-answers"></div>
+            </div>
+        </div>
+
+
+        <div class="summary-div">
+            <p><b>10. Как готвится к поступлению?:</b></p>
+            {% for prepare_to_ent in prepare_to_enter %}
+                    {{ prepare_to_ent }} -  <b class="text-success">{{ prepare_to_ent.sen_prepare_to_enter.all.count }}</b>
+                    <span class="text-muted">({{ prepare_to_ent.sen_prepare_to_enter.all.count|percent:results.count }} %)</span>;
+                <br>
+            {% endfor %}
+
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_coach_prepare_to_enter')">С помощью репетиторов (предметы)</a>
+                <div class="other-answers"></div>
+            </div>
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_course_prepare_to_enter')">На подготовительных курсах</a>
+                <div class="other-answers"></div>
+            </div>
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_other_prepare_to_enter')">Другое</a>
+                <div class="other-answers"></div>
+            </div>
+        </div>
+
+        <div class="summary-div">
+            <p><b>11. Хотел бы учиться в УГТУ?:</b></p>
+            {% count_by_str results 'if_you_want_ugtu' 'yes yes_but_do_not no not_know' as countall %}
+            {% for key, value in countall.items %}
+                {% if key == 'yes' %}
+                    Да - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'yes_but_do_not' %}
+                    Хотел бы, но не буду - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'no' %}
+                    Нет - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'not_know' %}
+                    Не знаю - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% endif %}
+                <br>
+            {% endfor %}
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_yes_if_you_want_ugtu')">Хотел бы, но не буду(причина)</a>
+                <div class="other-answers"></div>
+            </div>
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_no_if_you_want_ugtu')">Нет(причина)</a>
+                <div class="other-answers"></div>
+            </div>
+        </div>
+
+        <div class="summary-div">
+            <p><b>12. Хотел бы посещать подготовительные курсы УГТУ?:</b></p>
+            {% count_by_str results 'if_you_want_ugtu_training' 'yes no_money no already' as countall %}
+            {% for key, value in countall.items %}
+                {% if key == 'yes' %}
+                    Да - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'no_money' %}
+                    Хотел(а) бы, но нет возможности, т.к. курсы платные - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'no' %}
+                    Нет - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% elif key == 'already' %}
+                    Уже посещаю - <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                {% endif %}
+                <br>
+            {% endfor %}
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_if_you_want_ugtu_training')">По каким предметам</a>
+                <div class="other-answers"></div>
+            </div>
+        </div>
+
+        <div class="summary-div">
+            <p><b>13. В каких сферах студенческой жизни хотел бы принимать участие?:</b></p>
+            {% for students_li in students_life %}
+                    {{ students_li }} -  <b class="text-success">{{ students_li.sen_students_life.all.count }}</b>
+                    <span class="text-muted">({{ students_li.sen_students_life.all.count|percent:results.count }} %)</span>;
+                <br>
+            {% endfor %}
+
+            <div>
+                <br>
+                <a onclick="ViewOtherAnswers(this, 'senior', 'text_students_life')">Свой вариант</a>
+                <div class="other-answers"></div>
+            </div>
+        </div>
+
+        <div class="summary-div">
+            <p><b>14. Таблица интересов респонденов:</b></p>
+            <div class="table-interests">
+                <table>
+                    <tr>
+                        <th>
+                            Область интересов
+                        </th>
+                        <th>
+                            Отношение
+                        </th>
+                    </tr>
+
+                    {%  for interest in interests.all %}
+                        <tr>
+                            <td>
+                                {{ interest.name }}
+                            </td>
+                            <td>
+                                {% summary_interest_status interest 'senior' as status %}
+                                Да - <span class="text-success">{{ status.tr }}</span>
+                                <span class="text-muted">({{ status.tr|percent:results.count }} %)</span>
+                                <br>
+                                Нет - <span class="text-danger">{{ status.fl }}</span>
+                                <span class="text-muted">({{ status.fl|percent:results.count }} %)</span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <div class="summary-div">
+            <p><b>15. Контактные данные для рассылки:</b></p>
+            <div class="table-interests">
+                <table>
+                    <tr>
+                        <th>
+                            Фамилия
+                        </th>
+                        <th>
+                            Имя
+                        </th>
+                        <th>
+                            Отчество
+                        </th>
+                        <th>
+                            Телефон
+                        </th>
+                        <th>
+                            E-mail
+                        </th>
+                    </tr>
+
+                    {%  for contact in contacts.all %}
+                        <tr>
+                            <td>
+                                {{ contact.last_name }}
+                            </td>
+                            <td>
+                                {{ contact.first_name }}
+                            </td>
+                            <td>
+                                {{ contact.middle_name }}
+                            </td>
+                            <td>
+                                {{ contact.phone }}
+                            </td>
+                            <td>
+                                {{ contact.email }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
