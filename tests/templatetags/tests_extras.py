@@ -9,7 +9,10 @@ register = template.Library()
 def percent(value, total):
     if value == '':
         value = 0
-    return round(int(value) * 100 / int(total))
+    if total <= 0:
+        return 0
+    else:
+        return round(int(value) * 100 / int(total))
 
 
 @register.simple_tag(name='count_others')
@@ -37,7 +40,7 @@ def sum_same_items(objects, field):
     for obj in objects:
         item = getattr(obj, field) + ','
         string += item
-    string = string.replace(' ', '')
+    # string = string.replace(' ', '')
     string = string.replace(',,', ',nothing,')
     lst = string.split(',')
     dct = dict(Counter(lst[:-1]))

@@ -1,3 +1,7 @@
+h1, h2, h3, h4, h5{
+    font-family: 'Roboto', sans-serif;
+}
+
 .cut{
     width: 70px !important;
 }
@@ -9,29 +13,6 @@
 .lgt{
     font-size:20px;
 }
-
-/*.navbar-inverse {*/
-    /*background-color: #337AB7;*/
-    /*border-color: #337AB7;*/
-/*}*/
-
-/*.navbar-inverse .navbar-brand{*/
-    /*color: #fff;*/
-/*}*/
-
-
-/*.navbar-inverse .navbar-nav>li>a {*/
-    /*color: #fff;*/
-/*}*/
-
-/*.navbar-inverse .navbar-nav>li>a:hover {*/
-    /*background: #4692D4;*/
-    /*color: #fff;*/
-/*}*/
-
-/*.navbar {*/
-    /*border-radius: 0;*/
-/*}*/
 
 td {
     padding: 1px 7px;

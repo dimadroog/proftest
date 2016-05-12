@@ -2,32 +2,32 @@
 
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
-        <div class="summary-div">В данной возврастной категории было опрошенно <strong class="text-success text-st">{{ results.count }}</strong> респондентов.</div>
+        <div class="summary-div">
+            В данной категории было опрошенно <strong class="text-success text-st">{{ results.count }}</strong> респондентов.
+        </div>
 
         <div class="summary-div">
             <p><b>1. Из них по учебным заведениям:</b></p>
-            {% if request.GET.school %}
-                <p>Результаты только для - {{ schools.name }}</p>
-                <p><a href="{% url 'summary' 'middle' %}">Вернуться к результатам для всех школ</a></p>
-            {% else %}
-                {% for school in schools.all  %}
-                    {% if school.middle_set.all.count > 0 %}
-                        <a href="?school={{ school.id }}">{{ school }}</a> -
-                        <b class="text-success">{{ school.middle_set.all.count }}</b>
-                        <span class="text-muted">({{ school.middle_set.all.count|percent:results.count }} %)</span>;
-                        <br>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
+            {% for key, val in school_resp.items  %}
+                {% if val > 0 %}
+                    <a href="?school={{ key.id }}">{{ key }}</a> -
+                    <b class="text-success">{{ val }}</b>
+                    <span class="text-muted">({{ val|percent:results.count }} %)</span>;
+                    <br>
+                {% endif %}
+            {% endfor %}
         </div>
 
         <div class="summary-div">
             {% count_by_str results 'school_class' '8 9' as countall %}
             <p><b>2. Из них обучаются:</b></p>
             {% for key, value in countall.items %}
-                В {{ key }} Классе - <b class="text-success">{{ value }}</b>
-                <span class="text-muted">({{ value|percent:results.count }} %)</span>;
-                <br>
+                {% if value > 0 %}
+                    <a href="?class={{ key }}">В {{ key }} Классе</a> -
+                    <b class="text-success">{{ value }}</b>
+                    <span class="text-muted">({{ value|percent:results.count }} %)</span>;
+                    <br>
+                {% endif %}
             {% endfor %}
         </div>
 
@@ -49,18 +49,20 @@
 
         <div class="summary-div">
             <p><b>4. Любимые учебные предметы:</b></p>
-            {% for learn_subject in learn_subjects %}
-                    {{ learn_subject }} -  <b class="text-success">{{ learn_subject.mid_learn_subjects.all.count }}</b>
-                    <span class="text-muted">({{ learn_subject.mid_learn_subjects.all.count|percent:results.count }} %)</span>;
+            {% for key, val in learn_subjects_resp.items  %}
+                {{ key }} -
+                <b class="text-success">{{ val }}</b>
+                <span class="text-muted">({{ val|percent:results.count }} %)</span>;
                 <br>
             {% endfor %}
         </div>
 
         <div class="summary-div">
             <p><b>5. Углубленное изучение предметов:</b></p>
-            {% for deep_learn_subject in deep_learn_subjects %}
-                    {{ deep_learn_subject }} -  <b class="text-success">{{ deep_learn_subject.mid_deep_learn_subjects.all.count }}</b>
-                    <span class="text-muted">({{ deep_learn_subject.mid_deep_learn_subjects.all.count|percent:results.count }} %)</span>;
+            {% for key, val in deep_learn_subjects_resp.items  %}
+                {{ key }} -
+                <b class="text-success">{{ val }}</b>
+                <span class="text-muted">({{ val|percent:results.count }} %)</span>;
                 <br>
             {% endfor %}
         </div>
@@ -122,9 +124,10 @@
 
         <div class="summary-div">
             <p><b>8. Критерии выбора будующей профессии:</b></p>
-            {% for priority_pro in priority_prof %}
-                    {{ priority_pro }} -  <b class="text-success">{{ priority_pro.mid_priority_prof.all.count }}</b>
-                    <span class="text-muted">({{ priority_pro.mid_priority_prof.all.count|percent:results.count }} %)</span>;
+            {% for key, val in priority_prof_resp.items  %}
+                {{ key }} -
+                <b class="text-success">{{ val }}</b>
+                <span class="text-muted">({{ val|percent:results.count }} %)</span>;
                 <br>
             {% endfor %}
             <div>
@@ -136,9 +139,10 @@
 
         <div class="summary-div">
             <p><b>9. С кем обсуждал разные профессии:</b></p>
-            {% for talk_about_pro in talk_about_prof %}
-                {{ talk_about_pro }} -  <b class="text-success">{{ talk_about_pro.mid_talk_about_prof.all.count }}</b>
-                <span class="text-muted">({{ talk_about_pro.mid_talk_about_prof.all.count|percent:results.count }} %)</span>;
+            {% for key, val in talk_about_prof_resp.items  %}
+                {{ key }} -
+                <b class="text-success">{{ val }}</b>
+                <span class="text-muted">({{ val|percent:results.count }} %)</span>;
                 <br>
             {% endfor %}
             <div>
@@ -151,9 +155,10 @@
 
         <div class="summary-div">
             <p><b>10. Нужна ли помощь в выборе профессии?</b></p>
-            {% for help_prof_choic in help_prof_choice %}
-                {{ help_prof_choic }} -  <b class="text-success">{{ help_prof_choic.mid_help_prof_choice.all.count }}</b>
-                <span class="text-muted">({{ help_prof_choic.mid_help_prof_choice.all.count|percent:results.count }} %)</span>;
+            {% for key, val in help_prof_choice_resp.items  %}
+                {{ key }} -
+                <b class="text-success">{{ val }}</b>
+                <span class="text-muted">({{ val|percent:results.count }} %)</span>;
                 <br>
             {% endfor %}
             <div>
@@ -326,24 +331,24 @@
                         </th>
                     </tr>
 
-                    {%  for interest in interests.all %}
+                    {%  for interest in interests_resp %}
                         <tr>
                             <td>
                                 {{ interest.name }}
                             </td>
                             <td>
-                                {% summary_interest_status interest 'middle' as status %}
-                                Да - <span class="text-success">{{ status.tr }}</span>
-                                <span class="text-muted">({{ status.tr|percent:results.count }} %)</span>
+                                Да - <span class="text-success">{{ interest.tr }}</span>
+                                <span class="text-muted">({{ interest.tr|percent:results.count }} %)</span>
                                 <br>
-                                Нет - <span class="text-danger">{{ status.fl }}</span>
-                                <span class="text-muted">({{ status.fl|percent:results.count }} %)</span>
+                                Нет - <span class="text-danger">{{ interest.fl }}</span>
+                                <span class="text-muted">({{ interest.fl|percent:results.count }} %)</span>
                             </td>
                         </tr>
                     {% endfor %}
                 </table>
             </div>
         </div>
+
 
         <div class="summary-div">
             <p><b>17. Контактные данные для рассылки:</b></p>

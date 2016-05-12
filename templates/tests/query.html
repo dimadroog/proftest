@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<br>
+<div class="row">
+<div class="col-md-8 col-md-offset-2 panel panel-default">
+    <div class="panel-body">
+        <h3>Форма построения запросов</h3>
+
+        <h4 class="text-muted">Пожалуйста, выберите параметры выборки сводных результатов.</h4>
+
+        <form action="{% url 'query' %}" method="get">
+
+            <div class="form-group">
+                <label>Класс <span class="text-danger">*</span></label>
+                <select name="class" class="form-control" required>
+                    <option value="">Все классы</option>
+                    <option value="5">5 Класс</option>
+                    <option value="6">6 Класс</option>
+                    <option value="7">7 Класс</option>
+                    <option value="8">8 Класс</option>
+                    <option value="9">9 Класс</option>
+                    <option value="10">10 Класс</option>
+                    <option value="11">11 Класс</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Учебное заведение</label>
+                <select name="school" class="form-control">
+                    <option value="">Все учебные заведения</option>
+                    {% for school in schools %}
+                        <option value="{{ school.id }}">{{ school.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Найти</button>
+        </form>
+
+    </div>
+</div>
+</div>
+{% endblock %}

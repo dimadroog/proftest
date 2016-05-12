@@ -12,72 +12,209 @@ import json
 @login_required(login_url='/admin/login/')
 def summary(request, group):
     respondents = None
-    learn_subjects = None
-    deep_learn_subjects = None
-    how_did_you_know = None
-    talk_about_prof = None
-    priority_prof = None
-    help_prof_choice = None
-    interests = None
+    school_resp = None
+    # learn_subjects = None
+    learn_subjects_resp = None
+    # deep_learn_subjects = None
+    deep_learn_subjects_resp = None
+    how_did_you_know_resp = None
+    # talk_about_prof = None
+    talk_about_prof_resp = None
+    # priority_prof = None
+    priority_prof_resp = None
+    # help_prof_choice = None
+    help_prof_choice_resp = None
+    # interests = None
+    interests_resp = None
+    # why_this_inst = None
+    why_this_inst_resp = None
+    # prepare_to_enter = None
+    prepare_to_enter_resp = None
+    # students_life = None
+    students_life_resp = None
     contacts = None
-    why_this_inst = None
-    prepare_to_enter = None
-    students_life = None
-    if request.GET.get('school'):
-        schools = Schools.objects.get(id=request.GET.get('school'))
-    else:
-        schools = Schools.objects.all()
+    header_class = None
+    header_school = None
+    schools = Schools.objects.all()
 
     if group == 'junior':
-        if request.GET.get('school'):
-            respondents = Junior.objects.filter(school=schools)
+        header_class = '5-6-7'
+        header_school = 'Все учебные заведения'
+
+        if request.GET:
+
+            if request.GET.get('school') and not request.GET.get('class'):
+                schools = Schools.objects.filter(id=request.GET.get('school'))
+                respondents = Junior.objects.filter(school=schools)
+                header_school = Schools.objects.get(id=request.GET.get('school')).name
+
+            if request.GET.get('class') and not request.GET.get('school'):
+                respondents = Junior.objects.filter(school_class=request.GET.get('class'))
+                schools = schools.filter(junior__in=respondents)
+                header_class = request.GET.get('class')
+
+            if request.GET.get('class') and request.GET.get('school'):
+                respondents = Junior.objects.filter(school=request.GET.get('school'), school_class=request.GET.get('class'))
+                schools = Schools.objects.filter(id=request.GET.get('school'))
+                header_school = Schools.objects.get(id=request.GET.get('school')).name
+                header_class = request.GET.get('class')
+
         else:
             respondents = Junior.objects.all()
+
+        school_resp = get_items_with_cnt(respondents, schools, 'school')
+
         learn_subjects = LearnSubjects.objects.all()
+        learn_subjects_resp = get_items_with_cnt(respondents, learn_subjects, 'learn_subjects')
+
         deep_learn_subjects = DeepLearnSubjects.objects.all()
+        deep_learn_subjects_resp = get_items_with_cnt(respondents, deep_learn_subjects, 'deep_learn_subject')
+
         how_did_you_know = HowDidYouKnow.objects.all()
+        how_did_you_know_resp = get_items_with_cnt(respondents, how_did_you_know, 'how_did_you_know')
+
         talk_about_prof = TalkAboutProf.objects.all()
+        talk_about_prof_resp = get_items_with_cnt(respondents, talk_about_prof, 'talk_about_prof')
 
     if group == 'middle':
-        if request.GET.get('school'):
-            respondents = Middle.objects.filter(school=schools)
+        header_class = '8-9'
+        header_school = 'Все учебные заведения'
+
+        if request.GET:
+
+            if request.GET.get('school') and not request.GET.get('class'):
+                schools = Schools.objects.filter(id=request.GET.get('school'))
+                respondents = Middle.objects.filter(school=schools)
+                header_school = Schools.objects.get(id=request.GET.get('school')).name
+
+            if request.GET.get('class') and not request.GET.get('school'):
+                respondents = Middle.objects.filter(school_class=request.GET.get('class'))
+                schools = schools.filter(middle__in=respondents)
+                header_class = request.GET.get('class')
+
+            if request.GET.get('class') and request.GET.get('school'):
+                respondents = Middle.objects.filter(school=request.GET.get('school'), school_class=request.GET.get('class'))
+                schools = Schools.objects.filter(id=request.GET.get('school'))
+                header_school = Schools.objects.get(id=request.GET.get('school')).name
+                header_class = request.GET.get('class')
+
         else:
             respondents = Middle.objects.all()
+
+        school_resp = get_items_with_cnt(respondents, schools, 'school')
+
         learn_subjects = LearnSubjects.objects.all()
+        learn_subjects_resp = get_items_with_cnt(respondents, learn_subjects, 'learn_subjects')
+
         deep_learn_subjects = DeepLearnSubjects.objects.all()
+        deep_learn_subjects_resp = get_items_with_cnt(respondents, deep_learn_subjects, 'deep_learn_subject')
+
         talk_about_prof = TalkAboutProf.objects.all()
+        talk_about_prof_resp = get_items_with_cnt(respondents, talk_about_prof, 'talk_about_prof')
+
         priority_prof = PriorityProf.objects.all()
+        priority_prof_resp = get_items_with_cnt(respondents, priority_prof, 'priority_prof')
+
         help_prof_choice = HelpProfChoice.objects.all()
+        help_prof_choice_resp = get_items_with_cnt(respondents, help_prof_choice, 'help_prof_choice')
+
         interests = Interests.objects.all()
+        interests_resp = []
+        for interest in interests:
+            middle_interests = RespondentInterests.objects.exclude(middle=None)
+            middle_interests = middle_interests.filter(middle__in=respondents)
+            tr = middle_interests.filter(interest=interest, status=1).count()
+            fl = middle_interests.filter(interest=interest, status=0).count()
+            interests_resp.append({'name': interest.name, 'tr': tr, 'fl': fl})
+
         contacts = Contacts.objects.exclude(middle__isnull=True)
 
     if group == 'senior':
-        if request.GET.get('school'):
-            respondents = Senior.objects.filter(school=schools)
+        header_class = '10-11'
+        header_school = 'Все учебные заведения'
+
+        if request.GET:
+
+            if request.GET.get('school') and not request.GET.get('class'):
+                schools = Schools.objects.filter(id=request.GET.get('school'))
+                respondents = Senior.objects.filter(school=schools)
+                header_school = Schools.objects.get(id=request.GET.get('school')).name
+
+            if request.GET.get('class') and not request.GET.get('school'):
+                respondents = Senior.objects.filter(school_class=request.GET.get('class'))
+                schools = schools.filter(senior__in=respondents)
+                header_class = request.GET.get('class')
+
+            if request.GET.get('class') and request.GET.get('school'):
+                respondents = Senior.objects.filter(school=request.GET.get('school'), school_class=request.GET.get('class'))
+                schools = Schools.objects.filter(id=request.GET.get('school'))
+                header_school = Schools.objects.get(id=request.GET.get('school')).name
+                header_class = request.GET.get('class')
+
         else:
             respondents = Senior.objects.all()
+
+        school_resp = get_items_with_cnt(respondents, schools, 'school')
+
         help_prof_choice = HelpProfChoice.objects.all()
+        help_prof_choice_resp = get_items_with_cnt(respondents, help_prof_choice, 'help_prof_choice')
+
         why_this_inst = WhyThisInst.objects.all()
+        why_this_inst_resp = get_items_with_cnt(respondents, why_this_inst, 'why_this_inst')
+
         prepare_to_enter = PrepareToEnter.objects.all()
+        prepare_to_enter_resp = get_items_with_cnt(respondents, prepare_to_enter, 'prepare_to_enter')
+
         students_life = StudentsLife.objects.all()
+        students_life_resp = get_items_with_cnt(respondents, students_life, 'students_life')
+
         interests = Interests.objects.all()
+        interests_resp = []
+        for interest in interests:
+            senior_interests = RespondentInterests.objects.exclude(senior=None)
+            senior_interests = senior_interests.filter(senior__in=respondents)
+            tr = senior_interests.filter(interest=interest, status=1).count()
+            fl = senior_interests.filter(interest=interest, status=0).count()
+            interests_resp.append({'name': interest.name, 'tr': tr, 'fl': fl})
+
         contacts = Contacts.objects.exclude(senior__isnull=True)
 
     return render(request, 'tests/summary.html', {'results': respondents,
                                                   'group': group,
-                                                  'schools': schools,
-                                                  'learn_subjects': learn_subjects,
-                                                  'deep_learn_subjects': deep_learn_subjects,
-                                                  'how_did_you_know': how_did_you_know,
-                                                  'talk_about_prof': talk_about_prof,
-                                                  'priority_prof': priority_prof,
-                                                  'help_prof_choice': help_prof_choice,
-                                                  'interests': interests,
+                                                  'header_class': header_class,
+                                                  'header_school': header_school,
+                                                  # 'schools': schools,
+                                                  'school_resp': school_resp,
+                                                  # 'learn_subjects': learn_subjects,
+                                                  'learn_subjects_resp': learn_subjects_resp,
+                                                  # 'deep_learn_subjects': deep_learn_subjects,
+                                                  'deep_learn_subjects_resp': deep_learn_subjects_resp,
+                                                  # 'how_did_you_know': how_did_you_know,
+                                                  'how_did_you_know_resp': how_did_you_know_resp,
+                                                  # 'talk_about_prof': talk_about_prof,
+                                                  'talk_about_prof_resp': talk_about_prof_resp,
+                                                  # 'priority_prof': priority_prof,
+                                                  'priority_prof_resp': priority_prof_resp,
+                                                  # 'help_prof_choice': help_prof_choice,
+                                                  'help_prof_choice_resp': help_prof_choice_resp,
+                                                  # 'interests': interests,
+                                                  'interests_resp': interests_resp,
                                                   'contacts': contacts,
-                                                  'why_this_inst': why_this_inst,
-                                                  'prepare_to_enter': prepare_to_enter,
-                                                  'students_life': students_life,
+                                                  # 'why_this_inst': why_this_inst,
+                                                  'why_this_inst_resp': why_this_inst_resp,
+                                                  # 'prepare_to_enter': prepare_to_enter,
+                                                  'prepare_to_enter_resp': prepare_to_enter_resp,
+                                                  # 'students_life': students_life,
+                                                  'students_life_resp': students_life_resp,
                                                   })
+
+
+def get_items_with_cnt(respondents, objects, field):
+        dct = {}
+        for obj in objects:
+            cnt = respondents.filter(**{field: obj}).count()
+            dct.update({obj: cnt})
+        return dct
 
 
 @login_required(login_url='/admin/login/')
@@ -348,3 +485,31 @@ def view_other_answers(request):
         if not lst:
             lst = '<span class="text-muted">Ничего нет</span>'
         return HttpResponse(lst)
+
+
+@csrf_exempt
+def query(request):
+    schools = Schools.objects.all()
+
+    if request.GET:
+        url = ''
+        params = ''
+
+        if request.GET.get('class'):
+            if request.GET.get('class') == '5' or request.GET.get('class') == '6' or request.GET.get('class') == '7':
+                url = '/summary/junior/'
+                params = 'class=%s' % request.GET.get('class')
+            if request.GET.get('class') == '8' or request.GET.get('class') == '9':
+                url = '/summary/middle/'
+                params = 'class=%s' % request.GET.get('class')
+            if request.GET.get('class') == '10' or request.GET.get('class') == '11':
+                url = '/summary/senior/'
+                params = 'class=%s' % request.GET.get('class')
+
+        if request.GET.get('school'):
+            params += '&school=%s' % request.GET.get('school')
+
+        return HttpResponseRedirect(url + '?%s' % params)
+
+    return render(request, 'tests/query.html', {'schools': schools})
+

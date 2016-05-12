@@ -1,28 +1,35 @@
 {% extends 'base.html' %}
 {% block content %}
-        <h2 class="text-center">Сводные результаты</h2>
+    <h2 class="text-center">Сводные результаты</h2>
+        <h4 class="text-center">Учащиеся {{ header_class }} классов</h4>
+        <h4 class="text-center">{{ header_school }}</h4>
+        {% if request.GET %}
+            <p class="text-center hidden-print"><a href="{% url 'summary' group %}">Вернуться ко всем результатам этой возврастной категориии</a></p>
+        {% endif %}
+        <br>
+
+    {% if results.count > 0 %}
 
         {% if group == 'junior' %}
-            <h4 class="text-center">Учащиеся <b>5-6-7</b> классов</h4>
-            {% if request.GET.school %}
-                <h4 class="text-center">{{ schools }}</h4>
-            {% endif %}
-            <br>
             {% include 'tests/summary_junior.html' %}
         {% elif group == 'middle' %}
-            <h4 class="text-center">Учащиеся <b>8-9</b> классов</h4>
-            {% if request.GET.school %}
-                <h4 class="text-center">{{ schools }}</h4>
-            {% endif %}
-            <br>
             {% include 'tests/summary_middle.html' %}
         {% elif group == 'senior' %}
-            <h4 class="text-center">Учащиеся <b>10-11</b> классов</h4>
-            {% if request.GET.school %}
-                <h4 class="text-center">{{ schools }}</h4>
-            {% endif %}
-            <br>
             {% include 'tests/summary_senior.html' %}
         {% endif %}
 
+    {% else %}
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        <p>По составленному запросу нет ни одной заполненной анкеты.</p>
+                        <p>Вы можете <a href="{% url 'query' %}">перейти к форме построения запросов</a>, и задать другие параметры выборки анкет.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endif %}
 {% endblock %}

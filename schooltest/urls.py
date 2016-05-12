@@ -29,4 +29,5 @@ urlpatterns = [
     url(r'^summary/(?P<group>\w+)/$', 'tests.views.summary', name='summary'),
     url(r'^change_view/$', 'tests.views.change_view', name='change_view'),
     url(r'^view_other_answers/$', 'tests.views.view_other_answers', name='view_other_answers'),
+    url(r'^query/$', 'tests.views.query', name='query'),
 ]
