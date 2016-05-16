@@ -38,13 +38,13 @@ def summary_interest_status(interest, group):
 def sum_same_items(objects, field):
     string = ''
     for obj in objects:
-        item = getattr(obj, field) + ','
-        string += item
-    # string = string.replace(' ', '')
-    string = string.replace(',,', ',nothing,')
+        item = getattr(obj, field).strip().lower()
+        if item:
+            string += item + ','
+        else:
+            string += 'nothing,'
     lst = string.split(',')
     dct = dict(Counter(lst[:-1]))
-
     return dct
 
 

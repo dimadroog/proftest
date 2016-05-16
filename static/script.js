@@ -231,11 +231,11 @@ function BuildInterests(){
 }
 /* end interests */
 
-function ViewOtherAnswers(elm, group, field){
+function ViewOtherAnswers(elm, cls, sch, group, field){
     jQuery.ajax({
         type: 'POST',
         url: '/view_other_answers/',
-        data: {'field': field, 'group': group},
+        data: {'field': field, 'group':group, 'school':sch, 'class':cls},
         success: function(data){
             jQuery(elm).parent().find('.other-answers').html(data);
         },

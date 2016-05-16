@@ -78,7 +78,7 @@
                 <br>
             {% endfor %}
             <br>
-            <a onclick="ViewOtherAnswers(this, 'junior', 'text_hobby')">Ответы респондентов</a>
+            <a onclick="ViewOtherAnswers(this, '{{ request.GET.class }}', '{{ request.GET.school }}', '{{ group }}', 'text_hobby')">Ответы респондентов</a>
             <div class="other-answers"></div>
         </div>
 
@@ -96,7 +96,7 @@
                 <br>
             {% endfor %}
             <br>
-            <a onclick="ViewOtherAnswers(this, 'junior', 'text_what_is_university')">Ответы респондентов</a>
+            <a onclick="ViewOtherAnswers(this, '{{ request.GET.class }}', '{{ request.GET.school }}', '{{ group }}', 'text_what_is_university')">Ответы респондентов</a>
             <div class="other-answers"></div>
         </div>
 
@@ -124,7 +124,7 @@
                 <br>
             {% endfor %}
             <br>
-            <a onclick="ViewOtherAnswers(this, 'junior', 'text_how_did_you_know')">Ответы респондентов</a>
+            <a onclick="ViewOtherAnswers(this, '{{ request.GET.class }}', '{{ request.GET.school }}', '{{ group }}', 'text_how_did_you_know')">Ответы респондентов</a>
             <div class="other-answers"></div>
         </div>
 
@@ -167,12 +167,12 @@
             {% endfor %}
             <div>
                 <br>
-                <a onclick="ViewOtherAnswers(this, 'junior', 'text_yes_if_you_want_ugtu')">Хотел бы, но не буду(причина)</a>
+                <a onclick="ViewOtherAnswers(this, '{{ request.GET.class }}', '{{ request.GET.school }}', '{{ group }}', 'text_yes_if_you_want_ugtu')">Хотел бы, но не буду(причина)</a>
                 <div class="other-answers"></div>
             </div>
             <div>
                 <br>
-                <a onclick="ViewOtherAnswers(this, 'junior', 'text_no_if_you_want_ugtu')">Нет(причина)</a>
+                <a onclick="ViewOtherAnswers(this, '{{ request.GET.class }}', '{{ request.GET.school }}', '{{ group }}', 'text_no_if_you_want_ugtu')">Нет(причина)</a>
                 <div class="other-answers"></div>
             </div>
         </div>
@@ -187,7 +187,7 @@
             {% endfor %}
             <div>
                 <br>
-                <a onclick="ViewOtherAnswers(this, 'junior', 'text_talk_about_prof')">Свой вариант</a>
+                <a onclick="ViewOtherAnswers(this, '{{ request.GET.class }}', '{{ request.GET.school }}', '{{ group }}', 'text_talk_about_prof')">Свой вариант</a>
                 <div class="other-answers"></div>
             </div>
         </div>

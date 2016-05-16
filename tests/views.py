@@ -1,3 +1,4 @@
+from collections import Counter
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponseRedirect, HttpResponse
@@ -13,24 +14,15 @@ import json
 def summary(request, group):
     respondents = None
     school_resp = None
-    # learn_subjects = None
     learn_subjects_resp = None
-    # deep_learn_subjects = None
     deep_learn_subjects_resp = None
     how_did_you_know_resp = None
-    # talk_about_prof = None
     talk_about_prof_resp = None
-    # priority_prof = None
     priority_prof_resp = None
-    # help_prof_choice = None
     help_prof_choice_resp = None
-    # interests = None
     interests_resp = None
-    # why_this_inst = None
     why_this_inst_resp = None
-    # prepare_to_enter = None
     prepare_to_enter_resp = None
-    # students_life = None
     students_life_resp = None
     contacts = None
     header_class = None
@@ -183,28 +175,17 @@ def summary(request, group):
                                                   'group': group,
                                                   'header_class': header_class,
                                                   'header_school': header_school,
-                                                  # 'schools': schools,
                                                   'school_resp': school_resp,
-                                                  # 'learn_subjects': learn_subjects,
                                                   'learn_subjects_resp': learn_subjects_resp,
-                                                  # 'deep_learn_subjects': deep_learn_subjects,
                                                   'deep_learn_subjects_resp': deep_learn_subjects_resp,
-                                                  # 'how_did_you_know': how_did_you_know,
                                                   'how_did_you_know_resp': how_did_you_know_resp,
-                                                  # 'talk_about_prof': talk_about_prof,
                                                   'talk_about_prof_resp': talk_about_prof_resp,
-                                                  # 'priority_prof': priority_prof,
                                                   'priority_prof_resp': priority_prof_resp,
-                                                  # 'help_prof_choice': help_prof_choice,
                                                   'help_prof_choice_resp': help_prof_choice_resp,
-                                                  # 'interests': interests,
                                                   'interests_resp': interests_resp,
                                                   'contacts': contacts,
-                                                  # 'why_this_inst': why_this_inst,
                                                   'why_this_inst_resp': why_this_inst_resp,
-                                                  # 'prepare_to_enter': prepare_to_enter,
                                                   'prepare_to_enter_resp': prepare_to_enter_resp,
-                                                  # 'students_life': students_life,
                                                   'students_life_resp': students_life_resp,
                                                   })
 
@@ -469,22 +450,65 @@ def change_view(request):
 @csrf_exempt
 def view_other_answers(request):
     if request.POST:
+        nothing = ''
         if request.POST.get('group') == 'junior':
             respondents = Junior.objects.all()
-        elif request.POST.get('group') == 'middle':
+            if request.POST.get('school') and not request.POST.get('class'):
+                schools = Schools.objects.filter(id=request.POST.get('school'))
+                respondents = Junior.objects.filter(school=schools)
+
+            if request.POST.get('class') and not request.POST.get('school'):
+                respondents = Junior.objects.filter(school_class=request.POST.get('class'))
+
+            if request.POST.get('class') and request.POST.get('school'):
+                respondents = Junior.objects.filter(school=request.POST.get('school'), school_class=request.POST.get('class'))
+
+        if request.POST.get('group') == 'middle':
             respondents = Middle.objects.all()
-        elif request.POST.get('group') == 'senior':
+            if request.POST.get('school') and not request.POST.get('class'):
+                schools = Schools.objects.filter(id=request.POST.get('school'))
+                respondents = Middle.objects.filter(school=schools)
+
+            if request.POST.get('class') and not request.POST.get('school'):
+                respondents = Middle.objects.filter(school_class=request.POST.get('class'))
+
+            if request.POST.get('class') and request.POST.get('school'):
+                respondents = Middle.objects.filter(school=request.POST.get('school'), school_class=request.POST.get('class'))
+
+        if request.POST.get('group') == 'senior':
             respondents = Senior.objects.all()
+            if request.POST.get('school') and not request.POST.get('class'):
+                schools = Schools.objects.filter(id=request.POST.get('school'))
+                respondents = Senior.objects.filter(school=schools)
+
+            if request.POST.get('class') and not request.POST.get('school'):
+                respondents = Senior.objects.filter(school_class=request.POST.get('class'))
+
+            if request.POST.get('class') and request.POST.get('school'):
+                respondents = Senior.objects.filter(school=request.POST.get('school'), school_class=request.POST.get('class'))
+
+        dct = sum_same_items(respondents, request.POST.get('field'))
 
         lst = []
-        for respondent in respondents:
-            item = getattr(respondent, request.POST.get('field'))
-            if item:
-                lst.append(item + '<br>')
-
+        for name, cnt in dct.items():
+                item = '%s - <b class="text-success">%s</b>;' % (str(name), str(cnt))
+                if item:
+                    lst.append(item + '<br>')
         if not lst:
             lst = '<span class="text-muted">Ничего нет</span>'
         return HttpResponse(lst)
+
+
+def sum_same_items(objects, field):
+    string = ''
+    for obj in objects:
+        item = getattr(obj, field)
+        if item:
+            item = item.strip().lower()
+            string += item + ','
+    lst = string.split(',')
+    dct = dict(Counter(lst[:-1]))
+    return dct
 
 
 @csrf_exempt
