@@ -487,7 +487,10 @@ def view_other_answers(request):
             if request.POST.get('class') and request.POST.get('school'):
                 respondents = Senior.objects.filter(school=request.POST.get('school'), school_class=request.POST.get('class'))
 
-        dct = sum_same_items(respondents, request.POST.get('field'))
+        if request.POST.get('field') == 'text_what_is_university':
+            dct = sum_same_items_not_comma(respondents, request.POST.get('field'))
+        else:
+            dct = sum_same_items(respondents, request.POST.get('field'))
 
         lst = []
         for name, cnt in dct.items():
@@ -507,6 +510,18 @@ def sum_same_items(objects, field):
             item = item.strip().lower()
             string += item + ','
     lst = string.split(',')
+    dct = dict(Counter(lst[:-1]))
+    return dct
+
+
+def sum_same_items_not_comma(objects, field):
+    string = ''
+    for obj in objects:
+        item = getattr(obj, field)
+        if item:
+            item = item.strip().lower()
+            string += item + '=^.^='
+    lst = string.split('=^.^=')
     dct = dict(Counter(lst[:-1]))
     return dct
 
